@@ -7,12 +7,12 @@ from models.user import User
 
 user = APIRouter() 
 
-# Lista de user
+# User List
 @user.get('/users', response_model=list[User], tags=["users"])
 async def find_all_users():
     return usersEntity(conn.local.user.find())
 
-# Crear user
+# Create User
 @user.post('/users', response_model=User, tags=["users"])
 async def create_user(user: User):
     new_user = dict(user)
@@ -23,12 +23,12 @@ async def create_user(user: User):
     user = conn.local.user.find_one({"_id": id})
     return userEntity(user)
 
-# Get user By Id
+# Get User By Id
 @user.get('/users/{id}', response_model=User, tags=["users"])
 async def find_user(id: str):
     return userEntity(conn.local.user.find_one({"_id": ObjectId(id)}))
 
-# Update user
+# Update User
 @user.put("/users/{id}", response_model=User, tags=["users"])
 async def update_user(id: str, user: User):
     conn.local.user.find_one_and_update({
@@ -38,7 +38,7 @@ async def update_user(id: str, user: User):
     })
     return userEntity(conn.local.user.find_one({"_id": ObjectId(id)}))
 
-# Delete user
+# Delete User
 @user.delete("/users/{id}", status_code=status.HTTP_204_NO_CONTENT, tags=["users"])
 async def delete_user(id: str):
     conn.local.user.find_one_and_delete({
